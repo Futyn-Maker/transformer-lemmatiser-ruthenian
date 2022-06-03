@@ -27,7 +27,7 @@ def main(args):
         "overwrite_output_dir": True,
         "max_seq_length": 10,
         "train_batch_size": 8,
-        "num_train_epochs": 2,
+        "num_train_epochs": 4,
         "save_eval_checkpoints": False,
         "save_model_every_epoch": False,
         # "silent": True,
@@ -39,22 +39,18 @@ def main(args):
         "max_length": 15,
         "save_steps": -1,
     }
-    MODEL_PATH = "facebook/bart-large" if args.online != "0" else "bart-large"
     model = Seq2SeqModel(
-        encoder_decoder_type="bart",
-        encoder_decoder_name=MODEL_PATH, 
+        encoder_decoder_type=args.model_type,
+        encoder_decoder_name=args.model, 
         args=model_args,
 	use_cuda = torch.cuda.is_available(),)    
     model.train_model(train_df, eval_data=eval_df, matches=count_matches)
-    try:
-        print(model.eval_model(eval_df, matches=count_matches))
-    except:
-        print('Evaluation error')
     
 if __name__ == '__main__':    
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_data')
     parser.add_argument('--dev_data')
-    parser.add_argument('--online', default="0")
+    parser.add_argument('--model_type', default="bart")
+    parser.add_argument('--model', default="facebook/bart-large")
     args = parser.parse_args()
     main(args)
