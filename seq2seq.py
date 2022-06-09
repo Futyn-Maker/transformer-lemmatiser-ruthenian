@@ -25,9 +25,9 @@ def main(args):
     model_args = {
         "reprocess_input_data": True,
         "overwrite_output_dir": True,
-        "max_seq_length": 10,
-        "train_batch_size": 8,
-        "num_train_epochs": 4,
+        "max_seq_length": max([len(token) for token in train_df["target_text"].tolist()]),
+        "train_batch_size": int(args.batch),
+        "num_train_epochs": int(args.epochs),
         "save_eval_checkpoints": False,
         "save_model_every_epoch": False,
         # "silent": True,
@@ -36,7 +36,7 @@ def main(args):
         "evaluate_during_training_verbose": False,
         "use_multiprocessing": False,
         "save_best_model": False,
-        "max_length": 15,
+        "max_length": max([len(token) for token in train_df["input_text"].tolist()]),
         "save_steps": -1,
     }
     model = Seq2SeqModel(
@@ -52,5 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--dev_data')
     parser.add_argument('--model_type', default="bart")
     parser.add_argument('--model', default="facebook/bart-large")
+    parser.add_argument('--epochs', default="2")
+    parser.add_argument('--batch', default="64")
     args = parser.parse_args()
     main(args)
