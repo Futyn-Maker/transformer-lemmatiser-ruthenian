@@ -12,8 +12,8 @@ git clone https://github.com/The-One-Who-Speaks-and-Depicts/transformer-lemmatis
 4. Install Anaconda (recommended v11) and CUDA (recommended v11).
 5. Follow simpletransformers installation instructions [here](https://github.com/ThilinaRajapakse/simpletransformers).
 6. Activate virtual environment.
-7. If you are going to use the local model (or have to work offline), save the model (for instance, clone [bart-large](https://huggingface.co/facebook/bart-large) into the repository directory.
-8. Run the model; for reference, use [docs](https://github.com/ThilinaRajapakse/simpletransformers/blob/master/simpletransformers/seq2seq/seq2seq_model.py)
+7. If you are going to use the local model (or have to work offline), save the model (for instance, clone [bart-large](https://huggingface.co/facebook/bart-large)) into the repository directory.
+8. Run the model; for model_type and model reference, use [docs](https://github.com/ThilinaRajapakse/simpletransformers/blob/master/simpletransformers/seq2seq/seq2seq_model.py))
 ```
 python3 seq2seq.py --train_data <path to the training data .conllu file> --dev_data <path to the evaluation data .conllu file> --model_type <string>  --model <model name, or path to the folder with model) --epochs <non-negative integer> --batch <non-negative integer>
 ```
