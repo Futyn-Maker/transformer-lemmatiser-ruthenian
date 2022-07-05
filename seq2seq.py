@@ -39,11 +39,7 @@ def main(args):
         "max_length": max([len(token) for token in train_df["input_text"].tolist()]),
         "save_steps": -1,
     }
-    model = Seq2SeqModel(
-        encoder_decoder_type=args.model_type,
-        encoder_decoder_name=args.model, 
-        args=model_args,
-	use_cuda = torch.cuda.is_available(),)    
+    model = Seq2SeqModel("bert", args.model, args.model, args=model_args, use_cuda = torch.cuda.is_available(),)    
     model.train_model(train_df, eval_data=eval_df, matches=count_matches)
     
 if __name__ == '__main__':    
@@ -51,7 +47,7 @@ if __name__ == '__main__':
     parser.add_argument('--train_data')
     parser.add_argument('--dev_data')
     parser.add_argument('--model_type', default="bart")
-    parser.add_argument('--model', default="facebook/bart-large")
+    parser.add_argument('--model', default="ruBert-base")
     parser.add_argument('--epochs', default="2")
     parser.add_argument('--batch', default="64")
     args = parser.parse_args()
