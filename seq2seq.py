@@ -11,7 +11,7 @@ def load_conllu_dataset(datafile):
     for s in strings:
       if (s[0] != "#" and s.strip()):
           split_string = s.split('\t')
-          arr.append([split_string[1] + " " + split_string[3]+ " " + split_string[5], split_string[2]])    
+          arr.append([split_string[1].replace("(", "").replace(")", "") + " " + split_string[3]+ " " + split_string[5], split_string[2]])    
     return pd.DataFrame(arr, columns=["input_text", "target_text"])
 
 def count_matches(labels, preds):
