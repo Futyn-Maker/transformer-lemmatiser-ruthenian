@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+from sklearn.metrics import accuracy_score, f1_score
 from simpletransformers.seq2seq import Seq2SeqModel
 import argparse
 import torch
@@ -15,14 +16,13 @@ def load_conllu_dataset(datafile):
     return pd.DataFrame(arr, columns=["input_text", "target_text"])
 
 def count_matches(labels, preds):
-    print(labels)
-    print(preds)
     return sum([1 if label == pred else 0 for label, pred in zip(labels, preds)])
 
 def main(args):
     train_df = load_conllu_dataset(args.train_data)
     eval_df = load_conllu_dataset(args.dev_data)
     model_args = {
+        "do_lower_case": True,
         "reprocess_input_data": True,
         "overwrite_output_dir": True,
         "max_seq_length": max([len(token) for token in train_df["target_text"].tolist()]),
@@ -30,10 +30,8 @@ def main(args):
         "num_train_epochs": int(args.epochs),
         "save_eval_checkpoints": False,
         "save_model_every_epoch": False,
-        # "silent": True,
-        "evaluate_generated_text": False,
-        "evaluate_during_training": False,
-        "evaluate_during_training_verbose": False,
+        "evaluate_during_training": True,
+        "evaluate_during_training_verbose": True,
         "use_multiprocessing": False,
         "save_best_model": False,
         "max_length": max([len(token) for token in train_df["input_text"].tolist()]),
@@ -44,7 +42,7 @@ def main(args):
         encoder_decoder_name=args.model, 
         args=model_args,
 	use_cuda = torch.cuda.is_available(),)    
-    model.train_model(train_df, eval_data=eval_df, matches=count_matches)
+    model.train_model(train_df, eval_data=eval_df, matches=count_matches, accuracy=accuracy_score, f1=f1_score)
     
 if __name__ == '__main__':    
     parser = argparse.ArgumentParser()
